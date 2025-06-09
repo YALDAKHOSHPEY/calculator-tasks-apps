@@ -1,0 +1,122 @@
+/* تنظیمات کلی بدنه */
+body {
+    font-family: 'Baloo 2', cursive, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* بدون اسکرول */
+    overflow: hidden;
+    background: linear-gradient(45deg, #ffcce6, #ffb3d9);
+    margin: 0;
+    padding: 20px;
+}
+
+/* قاب نرم و سه‌بعدی */
+/* قاب نرم و سه‌بعدی با رنگ واقعی‌تر */
+/* قاب سه‌بعدی برجسته ماشین‌حساب */
+.calculator {
+    width: 320px;
+    max-width: 90vw;
+    background: radial-gradient(circle, #ff99cc, #ff66b3);
+    border-radius: 40px;
+    padding: 30px;
+    box-shadow:
+        22px 22px 45px rgba(255, 102, 153, 0.6), /* سایه‌ی عمیق‌تر */
+        -16px -16px 28px rgba(255, 221, 238, 0.9), /* نورپردازی برجسته */
+        inset 12px 12px 20px rgba(255, 102, 153, 0.4); /* افکت فرو رفتگی برای حس حجم */
+    border: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+}
+
+
+
+
+/* تنظیم نمایشگر */
+.display-container {
+    background: linear-gradient(145deg, #ffe6f2, #ffd1e5);
+    border-radius: 30px;
+    padding: 15px; /* کمی افزایش برای بهبود طراحی */
+    margin-bottom: 25px; /* تنظیم فاصله بیشتر از دکمه‌ها */
+    box-shadow:
+        inset 6px 6px 12px rgba(255, 153, 204, 0.4),
+        inset -6px -6px 12px rgba(255, 240, 245, 0.9);
+}
+
+/* تنظیم صحیح نمایشگر داخل ماشین‌حساب */
+.display {
+    width: calc(100% - 40px); /* جلوگیری از خروج از قاب */
+    height: 80px;
+    background: #fff5fa;
+    border-radius: 25px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 20px;
+    font-size: 38px;
+    font-weight: 800;
+    text-align: right; /* چینش اعداد به سبک ماشین‌حساب */
+    color: #ff6699;
+    text-shadow: 2px 2px 3px rgba(0,0,0,0.1);
+    border: 2px solid #ffccdd;
+}
+
+
+
+/* چینش دکمه‌ها */
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* حالت استاندارد ماشین‌حساب */
+    grid-gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* دکمه‌های سه‌بعدی */
+/* دکمه‌های سه‌بعدی */
+/* دکمه‌های سه‌بعدی با رنگ پررنگ‌تر */
+button {
+    height: 60px;
+    font-size: 22px;
+    font-weight: 900;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 20px;
+    cursor: pointer;
+    background: linear-gradient(145deg, #ff4d94, #ff0066); /* صورتی برجسته‌تر */
+    color: white;
+    box-shadow:
+        16px 16px 32px rgba(255, 77, 148, 0.6), /* سایه‌ی عمیق‌تر */
+        -12px -12px 24px rgba(255, 221, 238, 0.9), /* نورپردازی برجسته */
+        inset 8px 8px 12px rgba(255, 51, 102, 0.4); /* افکت فرو رفتگی */
+    transition: all 0.2s ease-in-out;
+    border: none;
+}
+
+button:active {
+    transform: scale(0.94);
+    box-shadow: inset 7px 7px 12px rgba(255, 77, 148, 0.4);
+}
+
+/* دکمه‌های مهندسی - حفظ رنگ آبی */
+.scientific {
+    background: linear-gradient(145deg, #0099ff, #33ccff); /* آبی هماهنگ */
+    font-size: 22px;
+    font-weight: 900;
+    border-radius: 20px;
+    box-shadow:
+        14px 14px 28px rgba(0, 153, 255, 0.6),
+        -12px -12px 24px rgba(204, 229, 255, 0.9),
+        inset 7px 7px 12px rgba(0, 102, 204, 0.4);
+    transition: all 0.2s ease-in-out;
+}
+
+.scientific:hover {
+    filter: drop-shadow(0 0 14px rgba(0, 153, 255, 0.6));
+}
+
+.scientific:active {
+    transform: scale(0.94);
+}

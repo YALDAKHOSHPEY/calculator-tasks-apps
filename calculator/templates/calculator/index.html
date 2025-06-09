@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Calculator</title>
+    {% load static %}
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'calculator/css/styles.css' %}">
+    <style>
+        /* Custom cursor */
+        body {
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ff4e79" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'), auto;
+        }
+        
+        /* Glow effects */
+        button:hover {
+            filter: drop-shadow(0 0 8px rgba(255, 105, 180, 0.7));
+        }
+        
+        .equals:hover {
+            filter: drop-shadow(0 0 10px rgba(255, 204, 0, 0.8));
+        }
+        
+        /* Animation for equals button */
+        @keyframes pulse {
+            0% { transform: translateY(6px) scale(1); }
+            50% { transform: translateY(6px) scale(1.05); }
+            100% { transform: translateY(6px) scale(1); }
+        }
+        
+        .equals.pressed {
+            animation: pulse 0.3s ease;
+        }
+        
+        /* Floating hearts animation */
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+        
+        .heart {
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .heart-2 {
+            animation-delay: 1s;
+        }
+
+        /* Ripple effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.4);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="heart heart-1">❤</div>
+    <div class="heart heart-2">❤</div>
+    
+    <div class="calculator">
+        <div class="display-container">
+            <div class="display" id="display">0</div>
+        </div>
+       <div class="buttons">
+            <button onclick="clearDisplay();" class="operator ac">AC</button>
+            <button onclick="appendToDisplay('/');" class="operator">/</button>
+            <button onclick="appendToDisplay('*');" class="operator">×</button>
+            <button onclick="backspace();" class="operator del">⌫</button>
+
+            <button onclick="appendToDisplay('7');">7</button>
+            <button onclick="appendToDisplay('8');">8</button>
+            <button onclick="appendToDisplay('9');">9</button>
+            <button onclick="appendToDisplay('-');" class="operator">-</button>
+
+            <button onclick="appendToDisplay('4');">4</button>
+            <button onclick="appendToDisplay('5');">5</button>
+            <button onclick="appendToDisplay('6');">6</button>
+            <button onclick="appendToDisplay('+');" class="operator">+</button>
+
+            <button onclick="appendToDisplay('1');">1</button>
+            <button onclick="appendToDisplay('2');">2</button>
+            <button onclick="appendToDisplay('3');">3</button>
+            <button onclick="calculate();" class="operator equals">=</button>
+
+            <button onclick="appendToDisplay('0');" class="zero">0</button>
+            <button onclick="appendToDisplay('.');">.</button>
+
+            <!-- دکمه‌های علمی -->
+            <button onclick="scientificFunction('sin');" class="scientific">sin</button>
+            <button onclick="scientificFunction('cos');" class="scientific">cos</button>
+            <button onclick="scientificFunction('tan');" class="scientific">tan</button>
+            <button onclick="scientificFunction('log');" class="scientific">log</button>
+            <button onclick="scientificFunction('ln');" class="scientific">ln</button>
+            <button onclick="scientificFunction('sqrt');" class="scientific">√</button>
+            <button onclick="scientificFunction('exp');" class="scientific">e^x</button>
+            <button onclick="scientificFunction('fact');" class="scientific">n!</button>
+            <button onclick="scientificFunction('pow2');" class="scientific">x²</button>
+            <button onclick="scientificFunction('pow3');" class="scientific">x³</button>
+            <button onclick="scientificFunction('pow10');" class="scientific">10^x</button>
+            <button onclick="scientificFunction('reciprocal');" class="scientific">1/x</button>
+            <button onclick="scientificFunction('abs');" class="scientific">|x|</button>
+        </div>
+        
+    </div>
+
+    <script>
+        let currentDisplay = '0';
+const display = document.getElementById('display');
+let isScientificMode = false;
+let isRadiansMode = true;
+
+// 🎵 **سیستم تولید صدا**
+function playSound(type) {
+    try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        const soundSettings = {
+            'click': { type: 'sine', freq: 800, gain: 0.1 },
+            'pop': { type: 'sine', freq: 500, gain: 0.2 },
+            'number': { type: 'square', freq: 300, gain: 0.1 },
+            'delete': { type: 'sawtooth', freq: 200, gain: 0.1 },
+            'success': { type: 'sine', freq: 1000, gain: 0.2 }
+        };
+
+        if (soundSettings[type]) {
+            oscillator.type = soundSettings[type].type;
+            oscillator.frequency.value = soundSettings[type].freq;
+            gainNode.gain.value = soundSettings[type].gain;
+        }
+
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.1);
+    } catch (e) {
+        console.log("Audio not supported", e);
+    }
+}
+
+// **به‌روزرسانی مقدار نمایشگر**
+function updateDisplay() {
+    display.textContent = currentDisplay !== 'Error' && !isNaN(currentDisplay) && currentDisplay !== 'Infinity' 
+        ? parseFloat(currentDisplay).toLocaleString('en-US') 
+        : currentDisplay;
+}
+
+// **افزودن مقدار به نمایشگر**
+function appendToDisplay(value) {
+    currentDisplay = currentDisplay === '0' && value !== '.' ? value : currentDisplay + value;
+    updateDisplay();
+    playSound('number');
+}
+
+// **پاک کردن نمایشگر (دکمه AC)**
+function clearDisplay() {
+    currentDisplay = '0';
+    updateDisplay();
+    playSound('pop');
+}
+
+// **پاک کردن یک کاراکتر (دکمه ⌫)**
+function backspace() {
+    currentDisplay = currentDisplay.length === 1 || currentDisplay === 'Error' ? '0' : currentDisplay.slice(0, -1);
+    updateDisplay();
+    playSound('delete');
+}
+
+// **انجام محاسبات**
+function calculate() {
+    try {
+        if (['Error', 'Infinity'].includes(currentDisplay)) return;
+
+        const expression = currentDisplay.replace(/×/g, '*').replace(/÷/g, '/');
+
+        if (!expression || /[+\-*/.]$/.test(expression)) {
+            currentDisplay = 'Error';
+            updateDisplay();
+            return;
+        }
+
+        currentDisplay = eval(expression).toString();
+    } catch {
+        currentDisplay = 'Error';
+    }
+    updateDisplay();
+    playSound('success');
+}
+
+// **افزودن توابع علمی**
+function scientificFunction(func) {
+    try {
+        if (currentDisplay === 'Error') return;
+        let value = parseFloat(currentDisplay);
+        let result = NaN;
+
+        const functions = {
+            'sin': () => isRadiansMode ? Math.sin(value) : Math.sin(value * Math.PI / 180),
+            'cos': () => isRadiansMode ? Math.cos(value) : Math.cos(value * Math.PI / 180),
+            'tan': () => isRadiansMode ? Math.tan(value) : Math.tan(value * Math.PI / 180),
+            'log': () => value > 0 ? Math.log10(value) : NaN, // بررسی مقدار مثبت برای `log`
+            'ln': () => value > 0 ? Math.log(value) : NaN, // بررسی مقدار مثبت برای `ln`
+            'sqrt': () => value >= 0 ? Math.sqrt(value) : NaN, // جلوگیری از `NaN` در `√`
+            'exp': () => Math.exp(value),
+            'fact': () => factorial(value), 
+            'pow2': () => Math.pow(value, 2), 
+            'pow3': () => Math.pow(value, 3), 
+            'pow10': () => Math.pow(10, value), 
+            'reciprocal': () => value !== 0 ? 1 / value : NaN, // جلوگیری از تقسیم بر صفر
+            'abs': () => Math.abs(value)
+        };
+
+        if (functions[func]) result = functions[func]();
+
+        currentDisplay = isNaN(result) || !isFinite(result) ? 'Error' : result.toFixed(8).toString();
+    } catch {
+        currentDisplay = 'Error';
+    }
+    updateDisplay();
+    playSound('click');
+}
+
+
+// **محاسبه فاکتوریل**
+function factorial(n) {
+    if (n < 0) return NaN;
+    return n <= 1 ? 1 : n * factorial(n - 1);
+}
+
+// **تغییر حالت زاویه (RAD/DEG)**
+function toggleAngleMode() {
+    isRadiansMode = !isRadiansMode;
+    document.getElementById('angle-mode').textContent = isRadiansMode ? 'RAD' : 'DEG';
+    playSound('click');
+}
+
+// **افزودن مقدار ثابت (π یا e)**
+function addConstant(constant) {
+    currentDisplay += constant === 'pi' ? 'π' : 'e';
+    updateDisplay();
+    playSound('number');
+}
+
+// **مدیریت افکت‌های دکمه‌ها**
+document.querySelectorAll('button').forEach(button => {
+    button.addEventListener('mousedown', e => {
+        button.classList.add('pressed');
+        const ripple = document.createElement('span');
+        ripple.classList.add('ripple');
+        ripple.style.left = `${e.offsetX}px`;
+        ripple.style.top = `${e.offsetY}px`;
+        button.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+    });
+
+    ['mouseup', 'mouseleave'].forEach(event => button.addEventListener(event, () => button.classList.remove('pressed')));
+});
+
+
+    </script>
+</body>
+</html>

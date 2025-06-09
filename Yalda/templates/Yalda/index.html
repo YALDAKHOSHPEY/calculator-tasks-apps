@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Calculator</title>
+    {% load static %}
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'Yalda/css/styles.css' %}">
+    <style>
+        /* Custom cursor */
+        body {
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ff4e79" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'), auto;
+        }
+        
+        /* Glow effects */
+        button:hover {
+            filter: drop-shadow(0 0 8px rgba(255, 105, 180, 0.7));
+        }
+        
+        .equals:hover {
+            filter: drop-shadow(0 0 10px rgba(255, 204, 0, 0.8));
+        }
+        
+        /* Animation for equals button */
+        @keyframes pulse {
+            0% { transform: translateY(6px) scale(1); }
+            50% { transform: translateY(6px) scale(1.05); }
+            100% { transform: translateY(6px) scale(1); }
+        }
+        
+        .equals.pressed {
+            animation: pulse 0.3s ease;
+        }
+        
+        /* Floating hearts animation */
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+        
+        .heart {
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .heart-2 {
+            animation-delay: 1s;
+        }
+
+        /* Ripple effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.4);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="heart heart-1">❤</div>
+    <div class="heart heart-2">❤</div>
+    
+    <div class="calculator">
+        <div class="display-container">
+            <div class="display" id="display">0</div>
+        </div>
+        <div class="buttons">
+            <button onclick="clearDisplay(); playSound('pop')" class="operator ac">AC</button>
+            <button onclick="appendToDisplay('/'); playSound('click')" class="operator">/</button>
+            <button onclick="appendToDisplay('*'); playSound('click')" class="operator">×</button>
+            <button onclick="backspace(); playSound('delete')" class="operator del">⌫</button>
+            
+            <button onclick="appendToDisplay('7'); playSound('number')">7</button>
+            <button onclick="appendToDisplay('8'); playSound('number')">8</button>
+            <button onclick="appendToDisplay('9'); playSound('number')">9</button>
+            <button onclick="appendToDisplay('-'); playSound('click')" class="operator">-</button>
+            
+            <button onclick="appendToDisplay('4'); playSound('number')">4</button>
+            <button onclick="appendToDisplay('5'); playSound('number')">5</button>
+            <button onclick="appendToDisplay('6'); playSound('number')">6</button>
+            <button onclick="appendToDisplay('+'); playSound('click')" class="operator">+</button>
+            
+            <button onclick="appendToDisplay('1'); playSound('number')">1</button>
+            <button onclick="appendToDisplay('2'); playSound('number')">2</button>
+            <button onclick="appendToDisplay('3'); playSound('number')">3</button>
+            <button onclick="calculate(); playSound('success')" class="operator equals">=</button>
+            
+            <button onclick="appendToDisplay('0'); playSound('number')" class="zero">0</button>
+            <button onclick="appendToDisplay('.'); playSound('click')">.</button>
+        </div>
+    </div>
+
+    <script>
+        let currentDisplay = '0';
+        const display = document.getElementById('display');
+        
+        // Simple sound generator
+        function playSound(type) {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                // Different sounds for different actions
+                switch(type) {
+                    case 'click':
+                        oscillator.type = 'sine';
+                        oscillator.frequency.value = 800;
+                        gainNode.gain.value = 0.1;
+                        break;
+                    case 'pop':
+                        oscillator.type = 'sine';
+                        oscillator.frequency.value = 500;
+                        gainNode.gain.value = 0.2;
+                        break;
+                    case 'number':
+                        oscillator.type = 'square';
+                        oscillator.frequency.value = 300;
+                        gainNode.gain.value = 0.1;
+                        break;
+                    case 'delete':
+                        oscillator.type = 'sawtooth';
+                        oscillator.frequency.value = 200;
+                        gainNode.gain.value = 0.1;
+                        break;
+                    case 'success':
+                        oscillator.type = 'sine';
+                        oscillator.frequency.value = 1000;
+                        gainNode.gain.value = 0.2;
+                        break;
+                }
+                
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.1);
+            } catch(e) {
+                console.log("Audio not supported", e);
+            }
+        }
+        
+        function updateDisplay() {
+            if (currentDisplay !== 'Error' && !isNaN(currentDisplay) && currentDisplay !== 'Infinity') {
+                const num = parseFloat(currentDisplay);
+                display.textContent = num.toLocaleString('en-US');
+            } else {
+                display.textContent = currentDisplay;
+            }
+        }
+        
+        function appendToDisplay(value) {
+            if (currentDisplay === '0' && value !== '.') {
+                currentDisplay = value;
+            } else if (currentDisplay === 'Error') {
+                currentDisplay = value;
+            } else {
+                currentDisplay += value;
+            }
+            updateDisplay();
+        }
+        
+        function clearDisplay() {
+            currentDisplay = '0';
+            updateDisplay();
+        }
+        
+        function backspace() {
+            if (currentDisplay.length === 1 || currentDisplay === 'Error') {
+                currentDisplay = '0';
+            } else {
+                currentDisplay = currentDisplay.slice(0, -1);
+            }
+            updateDisplay();
+        }
+        
+        function calculate() {
+            try {
+                if (currentDisplay === 'Error' || currentDisplay === 'Infinity') {
+                    return;
+                }
+
+                const expression = currentDisplay.replace(/×/g, '*').replace(/÷/g, '/');
+                
+                if (!expression || /[+\-*/.]$/.test(expression)) {
+                    currentDisplay = 'Error';
+                    updateDisplay();
+                    return;
+                }
+
+                const result = eval(expression);
+                
+                if (isNaN(result)) {
+                    currentDisplay = 'Error';
+                } else if (!isFinite(result)) {
+                    currentDisplay = 'Infinity';
+                } else {
+                    currentDisplay = Number.isInteger(result) ? 
+                        result.toString() : 
+                        parseFloat(result.toFixed(8)).toString();
+                }
+            } catch (error) {
+                currentDisplay = 'Error';
+            }
+            updateDisplay();
+        }
+
+        // Enhanced button press effects
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', (e) => {
+                button.classList.add('pressed');
+                // Ripple effect
+                const ripple = document.createElement('span');
+                ripple.classList.add('ripple');
+                ripple.style.left = `${e.offsetX}px`;
+                ripple.style.top = `${e.offsetY}px`;
+                button.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            });
+            
+            button.addEventListener('mouseup', () => {
+                button.classList.remove('pressed');
+            });
+            
+            button.addEventListener('mouseleave', () => {
+                button.classList.remove('pressed');
+            });
+        });
+    </script>
+</body>
+</html>
