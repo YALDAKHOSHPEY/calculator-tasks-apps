@@ -1,54 +1,190 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Calculator</title>
-    {% load static %}
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'calculator/css/styles.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>calculator 3D</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;800&family=Poppins:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        /* Custom cursor */
-        body {
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ff4e79" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'), auto;
+        /* Reset و فونت‌ها */
+        :root {
+            --primary-color: #ff0066;
+            --primary-light: #ff99cc;
+            --secondary-color: #0099ff;
+            --white: #fff5fa;
+            --shadow-dark: rgba(255, 77, 148, 0.5);
+            --shadow-light: rgba(255, 221, 238, 0.8);
+            --equals-color: #ffcc00;
         }
-        
-        /* Glow effects */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Baloo 2', -apple-system, BlinkMacSystemFont, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+            background: linear-gradient(45deg, #ffcce6, #ffb3d9);
+            touch-action: manipulation;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ff4e79" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'), auto;
+            overflow-x: hidden;
+        }
+
+        /* استایل اصلی ماشین حساب */
+        .calculator {
+            width: 100%;
+            max-width: 340px;
+            background: radial-gradient(circle, #ff99cc, #ff66b3);
+            border-radius: 30px;
+            padding: 20px;
+            box-shadow:
+                15px 15px 30px rgba(255, 102, 153, 0.6),
+                -10px -10px 20px rgba(255, 221, 238, 0.9),
+                inset 8px 8px 15px rgba(255, 102, 153, 0.4);
+            border: none;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* نمایشگر */
+        .display-container {
+            background: linear-gradient(145deg, #ffe6f2, #ffd1e5);
+            border-radius: 25px;
+            padding: 12px;
+            margin-bottom: 20px;
+            box-shadow:
+                inset 4px 4px 8px rgba(255, 153, 204, 0.4),
+                inset -4px -4px 8px rgba(255, 240, 245, 0.9);
+            transition: all 0.3s ease;
+        }
+
+        .display {
+            width: 100%;
+            height: 70px;
+            background: var(--white);
+            border-radius: 20px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0 15px;
+            font-size: 32px;
+            font-weight: 800;
+            text-align: right;
+            color: var(--primary-color);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            border: 2px solid #ffccdd;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        /* دکمه‌ها */
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 8px;
+        }
+
+        button {
+            height: 55px;
+            font-size: 20px;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            border-radius: 18px;
+            cursor: pointer;
+            background: linear-gradient(145deg, #ff4d94, var(--primary-color));
+            color: white;
+            box-shadow:
+                8px 8px 16px var(--shadow-dark),
+                -6px -6px 12px var(--shadow-light),
+                inset 5px 5px 8px rgba(255, 51, 102, 0.3);
+            transition: all 0.15s ease;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
         button:hover {
             filter: drop-shadow(0 0 8px rgba(255, 105, 180, 0.7));
         }
-        
+
+        button:active {
+            transform: scale(0.96);
+            box-shadow: inset 5px 5px 10px rgba(255, 77, 148, 0.4);
+        }
+
+        /* دکمه‌های علمی */
+        .scientific {
+            background: linear-gradient(145deg, #0099ff, var(--secondary-color));
+            box-shadow:
+                7px 7px 14px rgba(0, 153, 255, 0.5),
+                -6px -6px 12px rgba(204, 229, 255, 0.8),
+                inset 5px 5px 8px rgba(0, 102, 204, 0.3);
+        }
+
+        .scientific:hover {
+            filter: drop-shadow(0 0 8px rgba(0, 153, 255, 0.6));
+        }
+
+        .scientific:active {
+            transform: scale(0.96);
+            box-shadow: inset 5px 5px 10px rgba(0, 102, 204, 0.4);
+        }
+
+        /* دکمه مساوی */
+        .equals {
+            background: linear-gradient(145deg, #ffcc00, #ff9900);
+            box-shadow:
+                8px 8px 16px rgba(255, 204, 0, 0.5),
+                -6px -6px 12px rgba(255, 240, 200, 0.8),
+                inset 5px 5px 8px rgba(255, 153, 0, 0.3);
+        }
+
         .equals:hover {
             filter: drop-shadow(0 0 10px rgba(255, 204, 0, 0.8));
         }
-        
-        /* Animation for equals button */
-        @keyframes pulse {
-            0% { transform: translateY(6px) scale(1); }
-            50% { transform: translateY(6px) scale(1.05); }
-            100% { transform: translateY(6px) scale(1); }
-        }
-        
-        .equals.pressed {
-            animation: pulse 0.3s ease;
-        }
-        
-        /* Floating hearts animation */
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(5deg); }
-            100% { transform: translateY(0) rotate(0deg); }
-        }
-        
-        .heart {
-            animation: float 4s ease-in-out infinite;
-        }
-        
-        .heart-2 {
-            animation-delay: 1s;
+
+        /* دکمه AC و DEL */
+        .ac, .del {
+            background: linear-gradient(145deg, #ff3333, #cc0000);
+            box-shadow:
+                8px 8px 16px rgba(255, 51, 51, 0.5),
+                -6px -6px 12px rgba(255, 204, 204, 0.8),
+                inset 5px 5px 8px rgba(204, 0, 0, 0.3);
         }
 
-        /* Ripple effect */
+        /* قلب‌های شناور */
+        .heart {
+            position: absolute;
+            font-size: 24px;
+            color: rgba(255, 102, 153, 0.6);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .heart-1 {
+            top: 10%;
+            left: 10%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .heart-2 {
+            top: 70%;
+            right: 15%;
+            animation: float 7s ease-in-out infinite 1s;
+        }
+
+        /* افکت ریپل */
         .ripple {
             position: absolute;
             border-radius: 50%;
@@ -58,11 +194,65 @@
             pointer-events: none;
         }
 
+        /* انیمیشن‌ها */
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+
         @keyframes ripple {
             to {
                 transform: scale(4);
                 opacity: 0;
             }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pressed {
+            animation: pulse 0.3s ease;
+        }
+
+        /* تنظیمات ریسپانسیو */
+        @media (max-width: 400px) {
+            .calculator {
+                padding: 15px;
+                border-radius: 25px;
+            }
+            
+            .display {
+                height: 60px;
+                font-size: 28px;
+            }
+            
+            button {
+                height: 50px;
+                font-size: 18px;
+            }
+        }
+
+        @media (max-height: 600px) {
+            .calculator {
+                transform: scale(0.9);
+            }
+        }
+
+        /* حالت علمی - نمایش دکمه‌های بیشتر */
+        .scientific-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 8px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .show-scientific .scientific-buttons {
+            display: grid;
         }
     </style>
 </head>
@@ -74,7 +264,7 @@
         <div class="display-container">
             <div class="display" id="display">0</div>
         </div>
-       <div class="buttons">
+        <div class="buttons">
             <button onclick="clearDisplay();" class="operator ac">AC</button>
             <button onclick="appendToDisplay('/');" class="operator">/</button>
             <button onclick="appendToDisplay('*');" class="operator">×</button>
@@ -97,181 +287,268 @@
 
             <button onclick="appendToDisplay('0');" class="zero">0</button>
             <button onclick="appendToDisplay('.');">.</button>
-
-            <!-- دکمه‌های علمی -->
+            <button onclick="toggleScientific()" class="scientific">SCI</button>
+        </div>
+        
+        <div class="scientific-buttons">
             <button onclick="scientificFunction('sin');" class="scientific">sin</button>
             <button onclick="scientificFunction('cos');" class="scientific">cos</button>
             <button onclick="scientificFunction('tan');" class="scientific">tan</button>
+            <button onclick="toggleAngleMode()" class="scientific" id="angle-mode">RAD</button>
+            
             <button onclick="scientificFunction('log');" class="scientific">log</button>
             <button onclick="scientificFunction('ln');" class="scientific">ln</button>
             <button onclick="scientificFunction('sqrt');" class="scientific">√</button>
+            <button onclick="addConstant('pi');" class="scientific">π</button>
+            
             <button onclick="scientificFunction('exp');" class="scientific">e^x</button>
             <button onclick="scientificFunction('fact');" class="scientific">n!</button>
             <button onclick="scientificFunction('pow2');" class="scientific">x²</button>
             <button onclick="scientificFunction('pow3');" class="scientific">x³</button>
+            
             <button onclick="scientificFunction('pow10');" class="scientific">10^x</button>
             <button onclick="scientificFunction('reciprocal');" class="scientific">1/x</button>
             <button onclick="scientificFunction('abs');" class="scientific">|x|</button>
+            <button onclick="addConstant('e');" class="scientific">e</button>
         </div>
-        
     </div>
 
     <script>
         let currentDisplay = '0';
-const display = document.getElementById('display');
-let isScientificMode = false;
-let isRadiansMode = true;
+        const display = document.getElementById('display');
+        let isScientificMode = false;
+        let isRadiansMode = true;
+        let isScientificVisible = false;
 
-// 🎵 **سیستم تولید صدا**
-function playSound(type) {
-    try {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
+        // 🎵 سیستم تولید صدا
+        function playSound(type) {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
 
-        oscillator.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
 
-        const soundSettings = {
-            'click': { type: 'sine', freq: 800, gain: 0.1 },
-            'pop': { type: 'sine', freq: 500, gain: 0.2 },
-            'number': { type: 'square', freq: 300, gain: 0.1 },
-            'delete': { type: 'sawtooth', freq: 200, gain: 0.1 },
-            'success': { type: 'sine', freq: 1000, gain: 0.2 }
-        };
+                const soundSettings = {
+                    'click': { type: 'sine', freq: 800, gain: 0.1 },
+                    'pop': { type: 'sine', freq: 500, gain: 0.2 },
+                    'number': { type: 'square', freq: 300, gain: 0.1 },
+                    'delete': { type: 'sawtooth', freq: 200, gain: 0.1 },
+                    'success': { type: 'sine', freq: 1000, gain: 0.2 }
+                };
 
-        if (soundSettings[type]) {
-            oscillator.type = soundSettings[type].type;
-            oscillator.frequency.value = soundSettings[type].freq;
-            gainNode.gain.value = soundSettings[type].gain;
+                if (soundSettings[type]) {
+                    oscillator.type = soundSettings[type].type;
+                    oscillator.frequency.value = soundSettings[type].freq;
+                    gainNode.gain.value = soundSettings[type].gain;
+                }
+
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.1);
+            } catch (e) {
+                console.log("Audio not supported", e);
+            }
         }
 
-        oscillator.start();
-        oscillator.stop(audioCtx.currentTime + 0.1);
-    } catch (e) {
-        console.log("Audio not supported", e);
-    }
-}
+        // به‌روزرسانی مقدار نمایشگر
+        function updateDisplay() {
+            display.textContent = currentDisplay !== 'Error' && !isNaN(currentDisplay) && currentDisplay !== 'Infinity' 
+                ? parseFloat(currentDisplay).toLocaleString('en-US') 
+                : currentDisplay;
+        }
 
-// **به‌روزرسانی مقدار نمایشگر**
-function updateDisplay() {
-    display.textContent = currentDisplay !== 'Error' && !isNaN(currentDisplay) && currentDisplay !== 'Infinity' 
-        ? parseFloat(currentDisplay).toLocaleString('en-US') 
-        : currentDisplay;
-}
-
-// **افزودن مقدار به نمایشگر**
-function appendToDisplay(value) {
-    currentDisplay = currentDisplay === '0' && value !== '.' ? value : currentDisplay + value;
-    updateDisplay();
-    playSound('number');
-}
-
-// **پاک کردن نمایشگر (دکمه AC)**
-function clearDisplay() {
-    currentDisplay = '0';
-    updateDisplay();
-    playSound('pop');
-}
-
-// **پاک کردن یک کاراکتر (دکمه ⌫)**
-function backspace() {
-    currentDisplay = currentDisplay.length === 1 || currentDisplay === 'Error' ? '0' : currentDisplay.slice(0, -1);
-    updateDisplay();
-    playSound('delete');
-}
-
-// **انجام محاسبات**
-function calculate() {
-    try {
-        if (['Error', 'Infinity'].includes(currentDisplay)) return;
-
-        const expression = currentDisplay.replace(/×/g, '*').replace(/÷/g, '/');
-
-        if (!expression || /[+\-*/.]$/.test(expression)) {
-            currentDisplay = 'Error';
+        // افزودن مقدار به نمایشگر
+        function appendToDisplay(value) {
+            if (currentDisplay.length >= 15) return;
+            
+            currentDisplay = currentDisplay === '0' && value !== '.' ? value : currentDisplay + value;
             updateDisplay();
-            return;
+            playSound('number');
+            
+            // افکت ریپل
+            createRipple(event);
         }
 
-        currentDisplay = eval(expression).toString();
-    } catch {
-        currentDisplay = 'Error';
-    }
-    updateDisplay();
-    playSound('success');
-}
+        // پاک کردن نمایشگر (دکمه AC)
+        function clearDisplay() {
+            currentDisplay = '0';
+            updateDisplay();
+            playSound('pop');
+            
+            // افکت ریپل
+            createRipple(event);
+        }
 
-// **افزودن توابع علمی**
-function scientificFunction(func) {
-    try {
-        if (currentDisplay === 'Error') return;
-        let value = parseFloat(currentDisplay);
-        let result = NaN;
+        // پاک کردن یک کاراکتر (دکمه ⌫)
+        function backspace() {
+            currentDisplay = currentDisplay.length === 1 || currentDisplay === 'Error' ? '0' : currentDisplay.slice(0, -1);
+            updateDisplay();
+            playSound('delete');
+            
+            // افکت ریپل
+            createRipple(event);
+        }
 
-        const functions = {
-            'sin': () => isRadiansMode ? Math.sin(value) : Math.sin(value * Math.PI / 180),
-            'cos': () => isRadiansMode ? Math.cos(value) : Math.cos(value * Math.PI / 180),
-            'tan': () => isRadiansMode ? Math.tan(value) : Math.tan(value * Math.PI / 180),
-            'log': () => value > 0 ? Math.log10(value) : NaN, // بررسی مقدار مثبت برای `log`
-            'ln': () => value > 0 ? Math.log(value) : NaN, // بررسی مقدار مثبت برای `ln`
-            'sqrt': () => value >= 0 ? Math.sqrt(value) : NaN, // جلوگیری از `NaN` در `√`
-            'exp': () => Math.exp(value),
-            'fact': () => factorial(value), 
-            'pow2': () => Math.pow(value, 2), 
-            'pow3': () => Math.pow(value, 3), 
-            'pow10': () => Math.pow(10, value), 
-            'reciprocal': () => value !== 0 ? 1 / value : NaN, // جلوگیری از تقسیم بر صفر
-            'abs': () => Math.abs(value)
-        };
+        // انجام محاسبات
+        function calculate() {
+            try {
+                if (['Error', 'Infinity'].includes(currentDisplay)) return;
 
-        if (functions[func]) result = functions[func]();
+                // جایگزینی نمادها با عملگرهای استاندارد
+                const expression = currentDisplay
+                    .replace(/×/g, '*')
+                    .replace(/÷/g, '/')
+                    .replace(/π/g, Math.PI.toString())
+                    .replace(/e/g, Math.E.toString());
 
-        currentDisplay = isNaN(result) || !isFinite(result) ? 'Error' : result.toFixed(8).toString();
-    } catch {
-        currentDisplay = 'Error';
-    }
-    updateDisplay();
-    playSound('click');
-}
+                if (!expression || /[+\-*/.]$/.test(expression)) {
+                    currentDisplay = 'Error';
+                    updateDisplay();
+                    return;
+                }
 
+                const result = eval(expression);
+                currentDisplay = Number.isInteger(result) ? result.toString() : result.toFixed(8).toString();
+            } catch {
+                currentDisplay = 'Error';
+            }
+            updateDisplay();
+            playSound('success');
+            
+            // افکت ریپل و پالس
+            createRipple(event);
+            event.target.classList.add('pressed');
+            setTimeout(() => event.target.classList.remove('pressed'), 300);
+        }
 
-// **محاسبه فاکتوریل**
-function factorial(n) {
-    if (n < 0) return NaN;
-    return n <= 1 ? 1 : n * factorial(n - 1);
-}
+        // افزودن توابع علمی
+        function scientificFunction(func) {
+            try {
+                if (currentDisplay === 'Error') return;
+                let value = parseFloat(currentDisplay);
+                let result = NaN;
 
-// **تغییر حالت زاویه (RAD/DEG)**
-function toggleAngleMode() {
-    isRadiansMode = !isRadiansMode;
-    document.getElementById('angle-mode').textContent = isRadiansMode ? 'RAD' : 'DEG';
-    playSound('click');
-}
+                const functions = {
+                    'sin': () => isRadiansMode ? Math.sin(value) : Math.sin(value * Math.PI / 180),
+                    'cos': () => isRadiansMode ? Math.cos(value) : Math.cos(value * Math.PI / 180),
+                    'tan': () => isRadiansMode ? Math.tan(value) : Math.tan(value * Math.PI / 180),
+                    'log': () => value > 0 ? Math.log10(value) : NaN,
+                    'ln': () => value > 0 ? Math.log(value) : NaN,
+                    'sqrt': () => value >= 0 ? Math.sqrt(value) : NaN,
+                    'exp': () => Math.exp(value),
+                    'fact': () => factorial(value), 
+                    'pow2': () => Math.pow(value, 2), 
+                    'pow3': () => Math.pow(value, 3), 
+                    'pow10': () => Math.pow(10, value), 
+                    'reciprocal': () => value !== 0 ? 1 / value : NaN,
+                    'abs': () => Math.abs(value)
+                };
 
-// **افزودن مقدار ثابت (π یا e)**
-function addConstant(constant) {
-    currentDisplay += constant === 'pi' ? 'π' : 'e';
-    updateDisplay();
-    playSound('number');
-}
+                if (functions[func]) result = functions[func]();
 
-// **مدیریت افکت‌های دکمه‌ها**
-document.querySelectorAll('button').forEach(button => {
-    button.addEventListener('mousedown', e => {
-        button.classList.add('pressed');
-        const ripple = document.createElement('span');
-        ripple.classList.add('ripple');
-        ripple.style.left = `${e.offsetX}px`;
-        ripple.style.top = `${e.offsetY}px`;
-        button.appendChild(ripple);
-        setTimeout(() => ripple.remove(), 600);
-    });
+                currentDisplay = isNaN(result) || !isFinite(result) ? 'Error' : result.toString();
+            } catch {
+                currentDisplay = 'Error';
+            }
+            updateDisplay();
+            playSound('click');
+            
+            // افکت ریپل
+            createRipple(event);
+        }
 
-    ['mouseup', 'mouseleave'].forEach(event => button.addEventListener(event, () => button.classList.remove('pressed')));
-});
+        // محاسبه فاکتوریل
+        function factorial(n) {
+            if (n < 0) return NaN;
+            if (n > 20) return Infinity; // جلوگیری از اعداد بسیار بزرگ
+            return n <= 1 ? 1 : n * factorial(n - 1);
+        }
 
+        // تغییر حالت زاویه (RAD/DEG)
+        function toggleAngleMode() {
+            isRadiansMode = !isRadiansMode;
+            document.getElementById('angle-mode').textContent = isRadiansMode ? 'RAD' : 'DEG';
+            playSound('click');
+            
+            // افکت ریپل
+            createRipple(event);
+        }
 
+        // نمایش/مخفی کردن دکمه‌های علمی
+        function toggleScientific() {
+            isScientificVisible = !isScientificVisible;
+            document.querySelector('.calculator').classList.toggle('show-scientific');
+            playSound('click');
+            
+            // افکت ریپل
+            createRipple(event);
+        }
+
+        // افزودن مقدار ثابت (π یا e)
+        function addConstant(constant) {
+            const value = constant === 'pi' ? Math.PI.toString() : Math.E.toString();
+            currentDisplay = currentDisplay === '0' ? value : currentDisplay + value;
+            updateDisplay();
+            playSound('number');
+            
+            // افکت ریپل
+            createRipple(event);
+        }
+
+        // ایجاد افکت ریپل
+        function createRipple(event) {
+            if (!event) return;
+            
+            const button = event.currentTarget;
+            const ripple = document.createElement('span');
+            ripple.classList.add('ripple');
+            
+            const rect = button.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = event.clientX - rect.left - size / 2;
+            const y = event.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = `${size}px`;
+            ripple.style.left = `${x}px`;
+            ripple.style.top = `${y}px`;
+            
+            button.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        }
+
+        // مدیریت کلیک بر روی دکمه‌ها
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', function(e) {
+                this.classList.add('active');
+                createRipple(e);
+            });
+            
+            button.addEventListener('mouseup', function() {
+                this.classList.remove('active');
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                this.classList.remove('active');
+            });
+            
+            // برای صفحات لمسی
+            button.addEventListener('touchstart', function(e) {
+                this.classList.add('active');
+                const touch = e.touches[0];
+                const fakeEvent = {
+                    clientX: touch.clientX,
+                    clientY: touch.clientY,
+                    currentTarget: this
+                };
+                createRipple(fakeEvent);
+                e.preventDefault();
+            });
+            
+            button.addEventListener('touchend', function() {
+                this.classList.remove('active');
+            });
+        });
     </script>
 </body>
 </html>

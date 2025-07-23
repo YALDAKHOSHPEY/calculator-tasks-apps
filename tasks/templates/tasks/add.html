@@ -1,11 +1,22 @@
 {% extends "tasks/layout.html" %}
 
 {% block body %}
-    <h1>Add Task</h1>
-    <form action="{% url 'tasks:add' %}" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit">
-    </form>
-    <a href="{% url 'tasks:index' %}">View All Tasks</a>
+    <div class="form-page edit-page">
+        <h1 class="form-page__header">Edit Task</h1>
+        
+        <form class="task-form" action="{% url 'tasks:edit' task_index %}" method="post">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label class="form-label" for="id_task">Task:</label>
+                <input type="text" name="task" value="{{ form.task.value }}" 
+                       class="form-input" required id="id_task">
+            </div>
+            
+            <div class="form-actions">
+                <a href="{% url 'tasks:index' %}" class="cancel-btn">Cancel</a>
+                <button type="submit" class="submit-btn">Save Changes</button>
+            </div>
+        </form>
+    </div>
 {% endblock %}

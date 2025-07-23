@@ -1,0 +1,17 @@
+{% extends "tasks/layout.html" %}
+
+{% block body %}
+    <div class="delete-container">
+        <h1>Delete Task</h1>
+        <p class="confirmation-message">Are you sure you want to delete this task?</p>
+        <p class="task-content">{{ task }}</p>
+        
+        <form action="{% url 'tasks:delete' task.id %}" method="post" class="delete-form">
+            {% csrf_token %}
+            <div class="button-group">
+                <input type="submit" value="Confirm Delete" class="delete-btn">
+                <a href="{% url 'tasks:index' %}" class="cancel-link">Cancel</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

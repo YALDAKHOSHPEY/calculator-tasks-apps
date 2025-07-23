@@ -2,12 +2,21 @@
 
 {% block body %}
     <h1>Tasks</h1>
-    <ul>
-        {% for task in tasks %}
-            <li>{{ task }}</li>
+    <ul class="task-list">
+        {% for index, task in tasks %}
+            <li class="task-item">
+                {{ task }}
+                <div class="task-actions">
+                    <a href="{% url 'tasks:edit' index %}" class="btn btn-primary btn-sm">Edit</a>
+                    <form action="{% url 'tasks:delete' index %}" method="post" class="delete-form">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </div>
+            </li>
         {% empty %}
-            <li>No tasks.</li>
+            <li class="empty-message">No tasks.</li>
         {% endfor %}
     </ul>
-    <a href="{% url 'tasks:add' %}">Add New Task</a>
+    <a href="{% url 'tasks:add' %}" class="btn btn-success">Add New Task</a>
 {% endblock %}
