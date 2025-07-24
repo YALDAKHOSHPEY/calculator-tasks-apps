@@ -1,22 +1,142 @@
 {% extends "tasks/layout.html" %}
+{% load static %}
 
 {% block body %}
-    <div class="edit-page">
-        <h1 class="edit-page__header">Edit Task</h1>
+<style>
+    /* Main Container */
+    .edit-page {
+        max-width: 600px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Header */
+    .edit-page__header {
+        color: #2c3e50;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        font-size: 1.8rem;
+    }
+
+    /* Form Styles */
+    .edit-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    /* Form Group */
+    .edit-form__group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    /* Label */
+    .edit-form__label {
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 1rem;
+    }
+
+    /* Input Field */
+    .edit-form__input {
+        padding: 0.75rem 1rem;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+    }
+
+    .edit-form__input:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    }
+
+    /* Form Actions */
+    .edit-form__actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    /* Cancel Button */
+    .edit-form__cancel {
+        padding: 0.75rem 1.5rem;
+        background: #f1f1f1;
+        color: #333;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .edit-form__cancel:hover {
+        background: #e0e0e0;
+    }
+
+    /* Submit Button */
+    .edit-form__submit {
+        padding: 0.75rem 1.5rem;
+        background: #3498db;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .edit-form__submit:hover {
+        background: #2980b9;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .edit-page {
+            margin: 1rem;
+            padding: 1.5rem;
+        }
         
-        <form class="edit-form" action="{% url 'tasks:edit' task_index %}" method="post">
-            {% csrf_token %}
-            
-            <div class="edit-form__group">
-                <label class="edit-form__label" for="id_task">Task:</label>
-                <input type="text" name="task" value="{{ form.task.value }}" 
-                       class="edit-form__input" required id="id_task">
-            </div>
-            
-            <div class="edit-form__actions">
-                <a href="{% url 'tasks:index' %}" class="edit-form__cancel">Cancel</a>
-                <button type="submit" class="edit-form__submit">Save Changes</button>
-            </div>
-        </form>
-    </div>
+        .edit-form__actions {
+            flex-direction: column;
+        }
+        
+        .edit-form__cancel,
+        .edit-form__submit {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+<div class="edit-page">
+    <h1 class="edit-page__header">Edit Task</h1>
+    
+    <form class="edit-form" action="{% url 'tasks:edit' task_index=task_index %}" method="post">
+        {% csrf_token %}
+        
+        <div class="edit-form__group">
+            <label class="edit-form__label" for="id_task">Task Description:</label>
+            <input type="text" 
+                   name="task" 
+                   value="{{ form.task.value }}" 
+                   class="edit-form__input" 
+                   required 
+                   id="id_task"
+                   placeholder="Enter task description...">
+        </div>
+        
+        <div class="edit-form__actions">
+            <a href="{% url 'tasks:index' %}" class="edit-form__cancel">Cancel</a>
+            <button type="submit" class="edit-form__submit">Save Changes</button>
+        </div>
+    </form>
+</div>
 {% endblock %}

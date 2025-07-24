@@ -1,22 +1,185 @@
 {% extends "tasks/layout.html" %}
 
 {% block body %}
-    <h1>Tasks</h1>
-    <ul class="task-list">
-        {% for index, task in tasks %}
-            <li class="task-item">
-                {{ task }}
-                <div class="task-actions">
-                    <a href="{% url 'tasks:edit' index %}" class="btn btn-primary btn-sm">Edit</a>
-                    <form action="{% url 'tasks:delete' index %}" method="post" class="delete-form">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                    </form>
-                </div>
-            </li>
-        {% empty %}
-            <li class="empty-message">No tasks.</li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'tasks:add' %}" class="btn btn-success">Add New Task</a>
+<style>
+    /* Main container styles */
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+        background-color: #f8fafc;
+        color: #1e293b;
+        line-height: 1.5;
+    }
+
+    /* Heading style */
+    h1 {
+        color: #1e293b;
+        text-align: center;
+        margin-bottom: 2.5rem;
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+    }
+
+    /* Task list styles */
+    .task-list {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 3rem;
+        display: grid;
+        gap: 1rem;
+    }
+
+    /* Task item styles */
+    .task-item {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+
+    .task-item:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    /* Task text styles */
+    .task-text {
+        flex-grow: 1;
+        font-size: 1.125rem;
+        font-weight: 500;
+        color: #334155;
+        padding-right: 1rem;
+        word-break: break-word;
+    }
+
+    /* Task actions container */
+    .task-actions {
+        display: flex;
+        gap: 0.75rem;
+        flex-shrink: 0;
+    }
+
+    /* Button base styles */
+    .btn {
+        padding: 0.625rem 1.25rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: all 0.15s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid transparent;
+    }
+
+    /* Button specific styles */
+    .btn-primary {
+        background-color: #2563eb;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #2563eb;
+    }
+
+    .btn-danger {
+        background-color: #ef4444;
+        color: white;
+    }
+
+    .btn-danger:hover {
+        background-color: #dc2626;
+    }
+
+    .btn-success {
+        background-color: #10b981;
+        color: white;
+        display: block;
+        width: fit-content;
+        margin: 0 auto;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    .btn-success:hover {
+        background-color: #059669;
+    }
+
+    /* Delete form style */
+    .delete-form {
+        margin: 0;
+    }
+
+    /* Empty message style */
+    .empty-message {
+        text-align: center;
+        color: #64748b;
+        padding: 2rem;
+        background: white;
+        border-radius: 0.75rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        font-size: 1.125rem;
+    }
+
+    /* Button icons */
+    .btn i {
+        margin-right: 0.5rem;
+        font-size: 1rem;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+        body {
+            padding: 1.25rem;
+        }
+        
+        .task-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .task-actions {
+            width: 100%;
+            justify-content: flex-end;
+        }
+    }
+</style>
+
+<h1>Your Tasks</h1>
+<ul class="task-list">
+    {% for task in tasks %}
+        <li class="task-item">
+            <div class="task-text">
+                {% if task.1 %}  {# اگر تسک تاپل باشد #}
+                    {{ task.1 }}  {# فقط بخش متن را نمایش بده #}
+                {% else %}
+                    {{ task }}  {# اگر تسک رشته ساده باشد #}
+                {% endif %}
+            </div>
+            <div class="task-actions">
+                <a href="{% url 'tasks:edit' task_index=forloop.counter0 %}" class="btn btn-primary">
+                    <i>✏️</i> Edit
+                </a>
+                <form action="{% url 'tasks:delete' task_index=forloop.counter0 %}" method="post" class="delete-form">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">
+                        <i>🗑️</i> Delete
+                    </button>
+                </form>
+            </div>
+        </li>
+    {% empty %}
+        <li class="empty-message">No tasks yet. Add your first task below!</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'tasks:add' %}" class="btn btn-success">+ Add New Task</a>
 {% endblock %}

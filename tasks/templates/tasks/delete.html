@@ -1,17 +1,127 @@
 {% extends "tasks/layout.html" %}
 
 {% block body %}
-    <div class="delete-container">
-        <h1>Delete Task</h1>
-        <p class="confirmation-message">Are you sure you want to delete this task?</p>
-        <p class="task-content">{{ task }}</p>
+<style>
+    /* Main container styles */
+    .delete-container {
+        max-width: 500px;
+        margin: 3rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    /* Heading style */
+    .delete-container h1 {
+        color: #dc2626;
+        font-size: 1.75rem;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+    }
+
+    /* Confirmation message */
+    .confirmation-message {
+        font-size: 1.125rem;
+        color: #4b5563;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+    }
+
+    /* Task content display */
+    .task-content {
+        background: #f8fafc;
+        padding: 1.25rem;
+        border-radius: 8px;
+        border-left: 4px solid #dc2626;
+        font-size: 1.1rem;
+        color: #1f2937;
+        margin-bottom: 2rem;
+        word-break: break-word;
+        text-align: left;
+    }
+
+    /* Form styles */
+    .delete-form {
+        margin-top: 2rem;
+    }
+
+    /* Button group */
+    .button-group {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    /* Delete button */
+    .delete-btn {
+        background-color: #dc2626;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .delete-btn:hover {
+        background-color: #b91c1c;
+        transform: translateY(-1px);
+    }
+
+    /* Cancel link */
+    .cancel-link {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        background-color: #f3f4f6;
+        color: #4b5563;
+        text-decoration: none;
+        font-size: 1rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        border: 1px solid #e5e7eb;
+    }
+
+    .cancel-link:hover {
+        background-color: #e5e7eb;
+        color: #1f2937;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+        .delete-container {
+            margin: 1.5rem;
+            padding: 1.5rem;
+        }
         
-        <form action="{% url 'tasks:delete' task.id %}" method="post" class="delete-form">
-            {% csrf_token %}
-            <div class="button-group">
-                <input type="submit" value="Confirm Delete" class="delete-btn">
-                <a href="{% url 'tasks:index' %}" class="cancel-link">Cancel</a>
-            </div>
-        </form>
-    </div>
+        .button-group {
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .delete-btn,
+        .cancel-link {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="delete-container">
+    <h1>Delete Task</h1>
+    <p class="confirmation-message">Are you sure you want to delete this task?</p>
+    <p class="task-content">{{ task }}</p>
+    
+    <form action="{% url 'tasks:delete' task.id %}" method="post" class="delete-form">
+        {% csrf_token %}
+        <div class="button-group">
+            <input type="submit" value="Confirm Delete" class="delete-btn">
+            <a href="{% url 'tasks:index' %}" class="cancel-link">Cancel</a>
+        </div>
+    </form>
+</div>
 {% endblock %}

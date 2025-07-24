@@ -1,0 +1,152 @@
+/* Reset و فونت‌ها */
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&family=Poppins:wght@700;900&display=swap');
+
+/* تنظیمات کلی ریسپانسیو */
+:root {
+  --primary-color: #ff0066;
+  --primary-light: #ff99cc;
+  --secondary-color: #0099ff;
+  --white: #fff5fa;
+  --shadow-dark: rgba(255, 77, 148, 0.5);
+  --shadow-light: rgba(255, 221, 238, 0.8);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Baloo 2', -apple-system, BlinkMacSystemFont, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 15px;
+  background: linear-gradient(45deg, #ffcce6, #ffb3d9);
+  touch-action: manipulation;
+}
+
+/* استایل اصلی ماشین حساب */
+.calculator {
+  width: 100%;
+  max-width: 320px;
+  background: radial-gradient(circle, #ff99cc, #ff66b3);
+  border-radius: 30px;
+  padding: 20px;
+  box-shadow:
+    15px 15px 30px rgba(255, 102, 153, 0.6),
+    -10px -10px 20px rgba(255, 221, 238, 0.9),
+    inset 8px 8px 15px rgba(255, 102, 153, 0.4);
+  border: none;
+  overflow: hidden;
+}
+
+/* نمایشگر */
+.display-container {
+  background: linear-gradient(145deg, #ffe6f2, #ffd1e5);
+  border-radius: 25px;
+  padding: 12px;
+  margin-bottom: 20px;
+  box-shadow:
+    inset 4px 4px 8px rgba(255, 153, 204, 0.4),
+    inset -4px -4px 8px rgba(255, 240, 245, 0.9);
+}
+
+.display {
+  width: 100%;
+  height: 70px;
+  background: var(--white);
+  border-radius: 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 15px;
+  font-size: 32px;
+  font-weight: 800;
+  text-align: right;
+  color: var(--primary-color);
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+  border: 2px solid #ffccdd;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* دکمه‌ها */
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 8px;
+}
+
+button {
+  height: 55px;
+  font-size: 20px;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  border-radius: 18px;
+  cursor: pointer;
+  background: linear-gradient(145deg, #ff4d94, var(--primary-color));
+  color: white;
+  box-shadow:
+    8px 8px 16px var(--shadow-dark),
+    -6px -6px 12px var(--shadow-light),
+    inset 5px 5px 8px rgba(255, 51, 102, 0.3);
+  transition: all 0.15s ease;
+  border: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:active {
+  transform: scale(0.96);
+  box-shadow: inset 5px 5px 10px rgba(255, 77, 148, 0.4);
+}
+
+/* دکمه‌های علمی */
+.scientific {
+  background: linear-gradient(145deg, #0099ff, var(--secondary-color));
+  box-shadow:
+    7px 7px 14px rgba(0, 153, 255, 0.5),
+    -6px -6px 12px rgba(204, 229, 255, 0.8),
+    inset 5px 5px 8px rgba(0, 102, 204, 0.3);
+}
+
+.scientific:active {
+  transform: scale(0.96);
+  box-shadow: inset 5px 5px 10px rgba(0, 102, 204, 0.4);
+}
+
+/* تنظیمات برای صفحه‌های کوچک */
+@media (max-width: 400px) {
+  .calculator {
+    padding: 15px;
+    border-radius: 25px;
+  }
+  
+  .display {
+    height: 60px;
+    font-size: 28px;
+  }
+  
+  button {
+    height: 50px;
+    font-size: 18px;
+  }
+}
+
+/* تنظیمات برای لنداسکیپ */
+@media (min-width: 768px) and (orientation: landscape) {
+  body {
+    padding: 20px;
+  }
+  
+  .calculator {
+    max-width: 280px;
+  }
+  
+  button {
+    height: 45px;
+  }
+}

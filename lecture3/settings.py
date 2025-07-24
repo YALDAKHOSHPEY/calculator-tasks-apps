@@ -122,9 +122,47 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+# ... (previous imports remain the same)
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# ... (other settings remain the same until STATICFILES_DIRS)
+
+# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 
-
+# Remove or fix STATICFILES_DIRS if you don't have a static directory
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'static'),  # Only if this directory exists
 ]
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # مسیر جمع‌آوری فایل‌های استاتیک
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # مسیر فایل‌های استاتیک توسعه
+]
+
+# Add this for session support (required for your task app)
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+SESSION_COOKIE_AGE = 86400  # 1 day in seconds
+SESSION_SAVE_EVERY_REQUEST = True
+
+# Template configuration
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Add this line
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+# ... (rest of the settings remain the same)

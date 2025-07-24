@@ -1,22 +1,169 @@
 {% extends "tasks/layout.html" %}
 
 {% block body %}
-    <div class="form-page edit-page">
-        <h1 class="form-page__header">Edit Task</h1>
+<style>
+    /* Main container styles */
+    .form-page {
+        max-width: 520px;
+        margin: 2.5rem auto;
+        padding: 2.5rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    /* Header styles */
+    .form-page__header {
+        color: #111827;
+        text-align: center;
+        margin-bottom: 1.75rem;
+        font-size: 1.75rem;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+    }
+
+    /* Form styles */
+    .task-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    /* Form group styles */
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    /* Label styles */
+    .form-label {
+        font-weight: 600;
+        color: #374151;
+        font-size: 0.95rem;
+        margin-left: 0.25rem;
+    }
+
+    /* Input field styles */
+    .form-input {
+        padding: 0.875rem 1rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+        background-color: #f9fafb;
+    }
+
+    .form-input:hover {
+        border-color: #d1d5db;
+        background-color: #ffffff;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        background-color: #ffffff;
+    }
+
+    /* Submit button styles */
+    .form-submit {
+        background-color: #10b981;
+        color: white;
+        padding: 0.875rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin-top: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .form-submit:hover {
+        background-color: #059669;
+        transform: translateY(-1px);
+    }
+
+    .form-submit:active {
+        transform: translateY(0);
+    }
+
+    /* Back link styles */
+    .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 1.75rem;
+        color: #3b82f6;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        padding: 0.5rem;
+        border-radius: 6px;
+    }
+
+    .back-link:hover {
+        color: #2563eb;
+        background-color: #f3f4f6;
+        text-decoration: none;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+        .form-page {
+            margin: 1.25rem;
+            padding: 1.75rem;
+            border-radius: 10px;
+        }
         
-        <form class="task-form" action="{% url 'tasks:edit' task_index %}" method="post">
-            {% csrf_token %}
-            
-            <div class="form-group">
-                <label class="form-label" for="id_task">Task:</label>
-                <input type="text" name="task" value="{{ form.task.value }}" 
-                       class="form-input" required id="id_task">
-            </div>
-            
-            <div class="form-actions">
-                <a href="{% url 'tasks:index' %}" class="cancel-btn">Cancel</a>
-                <button type="submit" class="submit-btn">Save Changes</button>
-            </div>
-        </form>
-    </div>
+        .form-page__header {
+            font-size: 1.5rem;
+        }
+    }
+
+    /* Focus states for accessibility */
+    *:focus-visible {
+        outline: 2px solid #3b82f6;
+        outline-offset: 2px;
+    }
+</style>
+
+<div class="form-page edit-page">
+    <h1 class="form-page__header">Add New Task</h1>
+    
+    <form class="task-form" action="{% url 'tasks:add' %}" method="post">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label class="form-label" for="id_task">Task Description</label>
+            <input type="text" 
+                   name="task" 
+                   value="{{ form.task.value|default_if_none:'' }}" 
+                   class="form-input" 
+                   required 
+                   id="id_task"
+                   placeholder="What needs to be done?"
+                   aria-label="Task description">
+        </div>
+        
+        <button type="submit" class="form-submit">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14M5 12h14"/>
+            </svg>
+            Add Task
+        </button>
+    </form>
+    
+    <a href="{% url 'tasks:index' %}" class="back-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Back to Tasks List
+    </a>
+</div>
 {% endblock %}
