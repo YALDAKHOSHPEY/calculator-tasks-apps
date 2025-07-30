@@ -4,7 +4,7 @@ A simple and responsive collection of JavaScript mini-apps — including a **Cal
 
 ## 🚀 Live Demo
 
-> Coming soon... (You can deploy it with GitHub Pages or Netlify!)
+> Coming soon... 
 
 ---
 
@@ -50,7 +50,7 @@ calculator-tasks-apps/
 
 ## 📸 Screenshots
 
-> Add screenshots here (optional)
+> 
 
 ---
 
