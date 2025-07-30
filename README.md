@@ -21,7 +21,7 @@ This project is ideal for beginners who want to understand the fundamentals of D
 
 ## 🖼️ Preview
 
-![Calculator Screenshot](preview.png) <!-- Replace with actual screenshot if available -->
+![Calculator Screenshot](preview.png)
 
 ---
 
@@ -35,7 +35,11 @@ This project is ideal for beginners who want to understand the fundamentals of D
 
 ## 📁 Project Structure
 
+``` text 
+
 calculator/ │ ├── index.html        # Main HTML page ├── style.css         # CSS styles └── script.js         # JavaScript logic
+
+```
 
 ---
 
