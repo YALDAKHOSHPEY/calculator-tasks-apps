@@ -35,13 +35,12 @@ This project is ideal for beginners who want to understand the fundamentals of D
 
 ## 📁 Project Structure
 
-``` text 
-
+```text 
 calculator/
 │
-├── index.html        # Main HTML page ├── style.css         # CSS styles
-└── script.js         # JavaScript logic
-
+├── index.html # Main HTML page
+├── style.css  # CSS styles
+└── script.js  # JavaScript logic
 ```
 
 ---
