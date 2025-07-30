@@ -37,7 +37,10 @@ This project is ideal for beginners who want to understand the fundamentals of D
 
 ``` text 
 
-calculator/ │ ├── index.html        # Main HTML page ├── style.css         # CSS styles └── script.js         # JavaScript logic
+calculator/
+│
+├── index.html        # Main HTML page ├── style.css         # CSS styles
+└── script.js         # JavaScript logic
 
 ```
 
