@@ -85,15 +85,15 @@ lecture3/
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/VIDAKHOSHPEY22/calculator.git
+   git clone https://github.com/YALDAKHOSHPEY/calculator-tasks-apps.git
 
-2. Open the index.html file in your web browser:
+2. ```cd calculator-tasks-apps```
 
-open index.html
+3. open index.html
 
 or simply double-click the file.
 
-3. Don't forget to install requirements.txt
+4. Don't forget to install requirements.txt
 
 ```bash
 pip install -r requirements.txt
