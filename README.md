@@ -36,3 +36,19 @@ This project is perfect for beginners who want to understand DOM manipulation an
 ---
 
 ## 📁 Project Structure
+---
+
+🙋‍♀️ Authors
+
+👩‍💻 Vida Khoshpey
+🤝 Collaboration: Yalda Khoshpey
+
+
+---
+
+📄 License
+
+This project is licensed under the MIT License.
+
+
+---
