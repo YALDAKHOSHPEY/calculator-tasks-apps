@@ -36,6 +36,78 @@ This project is perfect for beginners who want to understand DOM manipulation an
 ---
 
 ## 📁 Project Structure
+``` text
+📁 Project Structure
+
+lecture3/
+├── calculator/                    # Vanilla JS Calculator App
+│   ├── index.html                 # Main HTML file
+│   ├── style.css                  # Styling for calculator
+│   └── script.js                  # JavaScript logic
+│
+├── newyear/                       # Django app: newyear
+│   ├── migrations/
+│   ├── static/
+│   ├── templates/
+│   ├── init.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+│
+├── tasks/                         # Django app: tasks (To-Do)
+│   ├── migrations/
+│   ├── static/
+│   ├── templates/
+│   ├── init.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── forms.py
+│   ├── models.py
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+│
+├── screenshots/                   # Project preview images
+│   ├── calculator_simple.png
+│   ├── calculator_pro.png
+│   └── tasks.png
+│
+├── manage.py                      # Django management script
+└── README.md                      # Project documentation
+```
+
+---
+
+## ▶️ How to Use
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/VIDAKHOSHPEY22/calculator.git
+
+2. Open the index.html file in your web browser:
+
+open index.html
+
+or simply double-click the file.
+
+3. Don't forget to install requirements.txt
+
+```bash
+pip install -r requirements.txt
+```
+
+
+
+---
+
+📚 Learning Purpose
+
+This project was created for practicing front-end skills and JavaScript basics.
+It's a great example for beginners who want to build functional UI applications.
+
 ---
 
 🙋‍♀️ Authors
