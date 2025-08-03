@@ -77,6 +77,7 @@ lecture3/
 │
 ├── manage.py                      # Django management script
 └── README.md                      # Project documentation
+|__ requirements.txt               # Install this 
 ```
 
 ---
