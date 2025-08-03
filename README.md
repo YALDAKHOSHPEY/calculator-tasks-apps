@@ -21,7 +21,10 @@ This project is ideal for beginners who want to understand the fundamentals of D
 
 ## 🖼️ Preview
 
-![Calculator Screenshot](preview.png)
+![Calculator Screenshot](screenshots/calculator_simple.png)
+![Calculator Screenshot](screenshots/calculator_pro.png)
+![Tasks Screenshot](screenshots/tasks.png)
+
 
 ---
 
@@ -72,7 +75,8 @@ It's a great example for beginners who want to build functional UI applications.
 
 🙋‍♀️ Author
 
-Made with ❤️ by Vida Khoshpey
+Made with by Vida Khoshpey
+Collaboration with Yalda Khoshpey
 
 
 ---
