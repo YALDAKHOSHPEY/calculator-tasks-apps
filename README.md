@@ -1,8 +1,7 @@
-<!--hey-->
-# 🧮 Calculator
+# 🧮 Calculator App
 
-A simple calculator app built with HTML, CSS, and JavaScript.  
-This project is ideal for beginners who want to understand the fundamentals of DOM manipulation and basic arithmetic logic in JavaScript.
+A simple calculator built with **HTML**, **CSS**, and **JavaScript**.  
+This project is perfect for beginners who want to understand DOM manipulation and arithmetic logic in JavaScript.
 
 <div align="center">
   <img src="https://img.shields.io/badge/Status-Completed-brightgreen?style=flat-square" alt="status"/>
@@ -13,77 +12,27 @@ This project is ideal for beginners who want to understand the fundamentals of D
 
 ## 🚀 Features
 
-- Basic arithmetic operations: addition, subtraction, multiplication, division  
-- Clean and responsive user interface  
-- Button click and keyboard input support  
-- Real-time display updates
+- ➕ Basic operations: addition, subtraction, multiplication, division  
+- 💻 Real-time display updates  
+- ⌨️ Keyboard input supported  
+- 🎨 Clean & responsive user interface
 
 ---
 
 ## 🖼️ Preview
 
-![Calculator Screenshot](screenshots/calculator_simple.png)
-![Calculator Screenshot](screenshots/calculator_pro.png)
-![Tasks Screenshot](screenshots/tasks.png)
-
+| Simple Calculator | Pro Calculator | To-Do App |
+|------------------|----------------|-----------|
+| ![Simple](screenshots/calculator_simple.png) | ![Pro](screenshots/calculator_pro.png) | ![Tasks](screenshots/tasks.png) |
 
 ---
 
-## 🛠️ Technologies Used
+## 🛠 Technologies Used
 
-- **HTML5** – Markup structure  
+- **HTML5** – Semantic structure  
 - **CSS3** – Styling and layout  
-- **JavaScript** – Calculator logic and DOM handling
+- **JavaScript** – Calculator logic & DOM interaction  
 
 ---
 
 ## 📁 Project Structure
-
-```text 
-calculator/
-│
-├── index.html # Main HTML page
-├── style.css  # CSS styles
-└── script.js  # JavaScript logic
-```
-
----
-
-## ▶️ How to Use
-
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/VIDAKHOSHPEY22/calculator.git
-
-2. Open the index.html file in your web browser:
-
-open index.html
-
-or simply double-click the file.
-
-
-
-
----
-
-📚 Learning Purpose
-
-This project was created for practicing front-end skills and JavaScript basics.
-It's a great example for beginners who want to build functional UI applications.
-
-
----
-
-🙋‍♀️ Author
-
-Made with by Vida Khoshpey
-Collaboration with Yalda Khoshpey
-
-
----
-
-📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
----
